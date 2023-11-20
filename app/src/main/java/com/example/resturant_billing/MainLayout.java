@@ -33,9 +33,9 @@ public class MainLayout extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainlayout);
 
-        FloatingActionButton fab=(FloatingActionButton) findViewById(R.id.fab);
+//        FloatingActionButton fab=(FloatingActionButton) findViewById(R.id.fab);
         drawerLayout = findViewById(R.id.drawer_layout);
-        BottomNavigationView bottomNavigationView=(BottomNavigationView) findViewById(R.id.bottomNavigationView);
+//        BottomNavigationView bottomNavigationView=(BottomNavigationView) findViewById(R.id.bottomNavigationView);
         Toolbar toolbar=(Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -50,31 +50,33 @@ public class MainLayout extends AppCompatActivity{
 
 
 
+
         replaceFragment(new TablesFragment());
 
-        bottomNavigationView.setBackground(null);
-        bottomNavigationView.setOnItemSelectedListener(item -> {
+//        bottomNavigationView.setBackground(null);
+//        bottomNavigationView.setOnItemSelectedListener(item -> {
+//
+//            switch (item.getItemId()) {
+////                case R.id.tables:
+////                    replaceFragment(new TablesFragment());
+////                    break;
+////                case R.id.ListItem:
+////                    replaceFragment(new ItemAddFragment());
+////                    break;
+////                case R.id.ItemOnTable:
+////                    replaceFragment(new ItemsOnTable());
+//            }
+//
+//            return true;
+//        });
 
-            switch (item.getItemId()) {
-//                case R.id.tables:
-//                    replaceFragment(new TablesFragment());
-//                    break;
-//                case R.id.ListItem:
-//                    replaceFragment(new ItemAddFragment());
-//                    break;
-//                case R.id.ItemOnTable:
-//                    replaceFragment(new ItemsOnTable());
-            }
+//       fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showBottomDialog();
+//            }
+//        });
 
-            return true;
-        });
-
-       fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showBottomDialog();
-            }
-        });
 
 
     }
@@ -87,60 +89,63 @@ public class MainLayout extends AppCompatActivity{
         fragmentTransaction.commit();
     }
 
-    private void showBottomDialog() {
 
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(getWindow().FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.bottomsheetlayout);
 
-        LinearLayout videoLayout = dialog.findViewById(R.id.layoutVideo);
-        LinearLayout shortsLayout = dialog.findViewById(R.id.layoutShorts);
-        LinearLayout liveLayout = dialog.findViewById(R.id.layoutLive);
-        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
-
-        videoLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-                Toast.makeText(MainLayout.this,"Upload a Video is clicked",Toast.LENGTH_SHORT).show();
-
-            }
-        });
-        shortsLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-                Toast.makeText(MainLayout.this,"Create a short is Clicked",Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-        liveLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-                Toast.makeText(MainLayout.this,"Go live is Clicked",Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
-
-    }
+//
+//    private void showBottomDialog() {
+//
+//        final Dialog dialog = new Dialog(this);
+//        dialog.requestWindowFeature(getWindow().FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.bottomsheetlayout);
+//
+//        LinearLayout videoLayout = dialog.findViewById(R.id.layoutVideo);
+//        LinearLayout shortsLayout = dialog.findViewById(R.id.layoutShorts);
+//        LinearLayout liveLayout = dialog.findViewById(R.id.layoutLive);
+//        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
+//
+//        videoLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                dialog.dismiss();
+//                Toast.makeText(MainLayout.this,"Upload a Video is clicked",Toast.LENGTH_SHORT).show();
+//
+//            }
+//        });
+//        shortsLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                dialog.dismiss();
+//                Toast.makeText(MainLayout.this,"Create a short is Clicked",Toast.LENGTH_SHORT).show();
+//
+//            }
+//        });
+//
+//        liveLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                dialog.dismiss();
+//                Toast.makeText(MainLayout.this,"Go live is Clicked",Toast.LENGTH_SHORT).show();
+//
+//            }
+//        });
+//
+//        cancelButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        dialog.show();
+//        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+//        dialog.getWindow().setGravity(Gravity.BOTTOM);
+//
+//    }
 
 
 }

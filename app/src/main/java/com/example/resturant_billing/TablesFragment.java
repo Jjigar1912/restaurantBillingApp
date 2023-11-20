@@ -2,25 +2,30 @@ package com.example.resturant_billing;
 
 import android.os.Bundle;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TablesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class TablesFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -28,15 +33,6 @@ public class TablesFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TablesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static TablesFragment newInstance(String param1, String param2) {
         TablesFragment fragment = new TablesFragment();
         Bundle args = new Bundle();
@@ -53,12 +49,73 @@ public class TablesFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tables, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_tables, container, false);
+
+        // Find the GridLayout
+        GridLayout TableContainer = view.findViewById(R.id.TableGrid);
+
+        //convert Dp to Pixel
+
+        int widthInDp = 130;
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float widthInPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, widthInDp, displayMetrics);
+
+        int heightInDp = 120;
+        float heightInPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, heightInDp, displayMetrics);
+
+
+        // Add child views to the GridLayout
+
+        // Example: Add a AppCompactButton
+
+        for(int i=1;i<=12;i++){
+            AppCompatButton OneTable = new AppCompatButton(getContext());
+            OneTable.setId(i);
+            OneTable.setText(Integer.toString(i));
+            ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams((int) widthInPx, (int) heightInPx);
+            OneTable.setLayoutParams(layoutParams);
+            OneTable.setGravity(Gravity.CENTER);
+            OneTable.setTextSize(TypedValue.COMPLEX_UNIT_DIP,50);
+
+            OneTable.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Handle button click
+                    int buttonId = v.getId();
+                    Bundle args = new Bundle();
+                    ItemAddFragment itemAddFragment=new ItemAddFragment();
+                    args.putString("tableNo", Integer.toString(buttonId));
+                    itemAddFragment.setArguments(args);
+                    replaceFragment(itemAddFragment);
+                }
+            });
+
+            TableContainer.addView(OneTable);
+        }
+
+
+
+
+        // ... Add more child views as needed
+
+        return view;
     }
+
+    private  void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
+    }
+
 }
+
