@@ -2,24 +2,29 @@ package com.example.resturant_billing.model;
 
 public class food_item {
 
-    private Long id;
+    private int id;
 
     private String name;
 
     private int price;
 
-    private int qty;
-
-    private Long categoryid;
+    private String category;
 
     public food_item(){
     }
 
-    public Long getId() {
+    public food_item(int id, String name, int price, String category) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.category = category;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -39,20 +44,12 @@ public class food_item {
         this.price = price;
     }
 
-    public int getQty() {
-        return qty;
+    public String getCategory() {
+        return category;
     }
 
-    public void setQty(int qty) {
-        this.qty = qty;
-    }
-
-    public Long getCategory() {
-        return categoryid;
-    }
-
-    public void setCategory(Long categoryid) {
-        this.categoryid = categoryid;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     @Override
@@ -61,8 +58,7 @@ public class food_item {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", price=" + price +
-                ", qty=" + qty +
-                ", categoryId=" + categoryid +
+                ", category=" + category +
                 '}';
     }
 }

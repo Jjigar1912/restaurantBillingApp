@@ -12,4 +12,5 @@
     <color name="colorPrimaryDark">#2c987d</color>
     <color name="colorAccent">#2c987d</color>
     <color name="lavender">#8692f7</color>
+    <color name="tableRowColor">#F0F7F7</color>
 </resources>

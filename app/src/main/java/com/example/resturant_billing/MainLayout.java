@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -49,33 +50,43 @@ public class MainLayout extends AppCompatActivity{
         }
 
 
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Toast.makeText(MainLayout.this, String.valueOf(item.getItemId()), Toast.LENGTH_SHORT).show();
+                switch (String.valueOf(item.getItemId())){
+
+                    case "2131296593":
+                        replaceFragment( new ItemAddFragment());
+                        break;
+                    case "2131296334":
+                        replaceFragment(new add_item_admin());
+                        break;
+                    case "2131296592":
+                        replaceFragment(new ProfileFragment());
+                        break;
+
+                    default:
+//                        Toast.makeText(MainLayout.this, "Please select valid menu Item", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                return true;
+            }
+
+        });
+
+        AppCompatButton gotoOrder=(AppCompatButton) findViewById(R.id.gotToOrderList);
+
+        gotoOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                replaceFragment(new ItemsOnTable());
+            }
+        });
+
+        replaceFragment(new ItemsOnTable());
 
 
-        replaceFragment(new TablesFragment());
-
-//        bottomNavigationView.setBackground(null);
-//        bottomNavigationView.setOnItemSelectedListener(item -> {
-//
-//            switch (item.getItemId()) {
-////                case R.id.tables:
-////                    replaceFragment(new TablesFragment());
-////                    break;
-////                case R.id.ListItem:
-////                    replaceFragment(new ItemAddFragment());
-////                    break;
-////                case R.id.ItemOnTable:
-////                    replaceFragment(new ItemsOnTable());
-//            }
-//
-//            return true;
-//        });
-
-//       fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                showBottomDialog();
-//            }
-//        });
 
 
 

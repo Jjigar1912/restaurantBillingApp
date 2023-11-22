@@ -1,7 +1,9 @@
 package com.example.resturant_billing;
 
+import android.app.Activity;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.example.resturant_billing.model.*;
 
@@ -19,6 +21,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ItemAddFragment extends Fragment{ //  implements View.OnClickListener
 
@@ -29,13 +32,17 @@ public class ItemAddFragment extends Fragment{ //  implements View.OnClickListen
 
     //    List food item
     private List<order_item> foodList= new ArrayList<order_item>();
+    private List<order_item> finalOrder= new ArrayList<order_item>();
 
     private String mParam1;
     private String mParam2;
 
+
     public ItemAddFragment() {
         // Required empty public constructor
     }
+
+
 
     public static ItemAddFragment newInstance(String param1, String param2) {
         ItemAddFragment fragment = new ItemAddFragment();
@@ -61,17 +68,24 @@ public class ItemAddFragment extends Fragment{ //  implements View.OnClickListen
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_item_add, container, false);
 
-        foodList.add(new order_item(11,"Pizza Margherita",180,"pizza",1,180));
-        foodList.add(new order_item(12,"Pizza Vegetarian",175,"pizza",2,175*2));
-        foodList.add(new order_item(13,"Veggie Burger",120,"burger",1,120));
-        foodList.add(new order_item(14,"Cheeseburger",140,"burger",3,420));
-        foodList.add(new order_item(15,"Greek Salad",220,"salad",2,440));
-        foodList.add(new order_item(16,"Grilled Cheese",60,"sandwich",4,240));
-        foodList.add(new order_item(17,"Grilled Salmon",180,"seafood",1,180));
-        foodList.add(new order_item(18,"Spicy Chicken Curry",180,"special",1,180));
-        foodList.add(new order_item(19,"Paneer Tikka Masala",220,"special",1,220));
-        foodList.add(new order_item(20,"Cola",30,"Beverages",2,60));
-        foodList.add(new order_item(21,"Mango Lassi",60,"Beverages",1,60));
+
+
+        foodList.add(new order_item(11,"Pizza Margherita",180,"pizza",0,180));
+        foodList.add(new order_item(12,"Pizza Vegetarian",175,"pizza",0,175*2));
+        foodList.add(new order_item(13,"Veggie Burger",120,"burger",0,120));
+        foodList.add(new order_item(14,"Cheeseburger",140,"burger",0,420));
+        foodList.add(new order_item(15,"Greek Salad",220,"salad",0,440));
+        foodList.add(new order_item(16,"Grilled Cheese",60,"sandwich",0,240));
+        foodList.add(new order_item(17,"Grilled Salmon",180,"seafood",0,180));
+        foodList.add(new order_item(18,"Spicy Chicken Curry",180,"special",0,180));
+        foodList.add(new order_item(19,"Paneer Tikka Masala",220,"special",0,220));
+        foodList.add(new order_item(20,"Cola",30,"Beverages",0,60));
+        foodList.add(new order_item(21,"Mango Lassi",60,"Beverages",0,60));
+        foodList.add(new order_item(22,"Mozzarella Sticks",60,"Appetizers",0,199));
+        foodList.add(new order_item(23,"Nachos",60,"Appetizers",0,179));
+        foodList.add(new order_item(24,"Bruschetta",60,"Appetizers",0,169));
+        foodList.add(new order_item(25,"Chocolate Cake",60,"Desserts",0,80));
+        foodList.add(new order_item(26,"Vanilla Ice Cream",60,"Desserts",0,50));
 
 
         GridLayout foodItemContainer=(GridLayout) view.findViewById(R.id.foodItemGrid);
@@ -164,7 +178,6 @@ public class ItemAddFragment extends Fragment{ //  implements View.OnClickListen
                     if(item.getQty() > 0){
                         item.setQty(item.getQty()-1);
                         editText.setText(Integer.toString(item.getQty()));
-                        Toast.makeText(getContext(), Integer.toString(item.getQty()), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -199,7 +212,6 @@ public class ItemAddFragment extends Fragment{ //  implements View.OnClickListen
                 public void onClick(View view) {
                     item.setQty(item.getQty()+1);
                     editText.setText(Integer.toString(item.getQty()));
-                    Toast.makeText(getContext(), Integer.toString(item.getQty()), Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -214,9 +226,41 @@ public class ItemAddFragment extends Fragment{ //  implements View.OnClickListen
     }
 
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        finalOrder=foodList.stream()
+                .filter(item -> item.getQty() > 0 )
+                .collect(Collectors.toList());
+
+        ItemAddFragment fragment = new ItemAddFragment();
+        Bundle args = new Bundle();
+        args.putString("order",finalOrder.toString());
+        fragment.setArguments(args);
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        finalOrder=foodList.stream()
+                .filter(item -> item.getQty() > 0 )
+                .collect(Collectors.toList());
+
+        ItemAddFragment fragment = new ItemAddFragment();
+        Bundle args = new Bundle();
+        args.putString("order",finalOrder.toString());
+        fragment.setArguments(args);
+    }
+
     private int dpToPx(int dp) {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         float widthInPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, displayMetrics);
         return (int) widthInPx;
     }
+
+
+
+
 }
