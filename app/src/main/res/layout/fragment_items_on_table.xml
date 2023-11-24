@@ -97,6 +97,7 @@
                            android:layout_weight="3"
                            android:textStyle="bold"
                            android:gravity="center"
+                           android:textColor="@color/black"
                            android:textSize="20dp"
                            android:text="Total" />
                        <TextView
@@ -106,6 +107,7 @@
                            android:layout_weight="1"
                            android:textStyle="bold"
                            android:gravity="center"
+                           android:textColor="@color/black"
                            android:textSize="20dp"
                            android:text="00000" />
                    </TableRow>
@@ -138,12 +140,14 @@
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:layout_gravity="center"
+                   android:textColor="@color/black"
                    android:text="Resturant Address"
                    android:textSize="25dp"/>
                <TextView
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:layout_gravity="center"
+                   android:textColor="@color/black"
                    android:text="Restaurant Address"
                    android:layout_marginBottom="5dp"
                    android:textSize="15dp"/>
@@ -161,6 +165,7 @@
                        android:layout_height="wrap_content"
                        android:layout_gravity="center"
                        android:gravity="center|start"
+                       android:textColor="@color/black"
                        android:layout_weight="1"
                        android:text="Owner Name : Moin Kadiwal"/>
                    <TextView
@@ -168,6 +173,7 @@
                        android:layout_height="wrap_content"
                        android:layout_gravity="center"
                        android:gravity="center|end"
+                       android:textColor="@color/black"
                        android:layout_weight="1"
                        android:text="Phone : 9999999999"/>
 
@@ -185,6 +191,7 @@
                        android:layout_height="wrap_content"
                        android:layout_gravity="center"
                        android:gravity="center|start"
+                       android:textColor="@color/black"
                        android:layout_weight="1"
                        android:text="GST N0 : 1234567890"/>
                    <TextView
@@ -192,6 +199,7 @@
                        android:layout_height="wrap_content"
                        android:layout_gravity="center"
                        android:gravity="center|end"
+                       android:textColor="@color/black"
                        android:layout_weight="1"
                        android:text="Bill No : 1234332"/>
 
@@ -217,6 +225,7 @@
                            android:layout_height="wrap_content"
                            android:layout_weight="0.5"
                            android:textStyle="bold"
+                           android:textColor="@color/black"
                            android:gravity="center|start"
                            android:text="No." />
                        <TextView
@@ -224,11 +233,13 @@
                            android:layout_height="wrap_content"
                            android:layout_weight="2"
                            android:textStyle="bold"
+                           android:textColor="@color/black"
                            android:text="Item" />
                        <TextView
                            android:layout_width="wrap_content"
                            android:layout_height="wrap_content"
                            android:layout_weight="0.5"
+                           android:textColor="@color/black"
                            android:textStyle="bold"
                            android:text="Qty" />
                        <TextView
@@ -236,6 +247,7 @@
                            android:layout_height="wrap_content"
                            android:textStyle="bold"
                            android:layout_weight="1"
+                           android:textColor="@color/black"
                            android:text="Total" />
 
                    </TableRow>
@@ -245,34 +257,7 @@
                        android:layout_height="1dp"
                        android:background="@color/black"/>
 
-                   <TableRow
-                       android:padding="5dp"
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content">
 
-                       <TextView
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:layout_weight="0.5"
-                           android:gravity="center|start"
-                           android:text="1" />
-                       <TextView
-                           android:layout_width="200dp"
-                           android:layout_height="wrap_content"
-                           android:layout_weight="2"
-                           android:text="Margarita Pizza" />
-                       <TextView
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:layout_weight="0.5"
-                           android:text="2" />
-                       <TextView
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:layout_weight="1"
-                           android:text="360" />
-
-                   </TableRow>
 
 
                </TableLayout>
@@ -298,6 +283,7 @@
                            android:layout_height="wrap_content"
                            android:layout_weight="3"
                            android:textStyle="bold"
+                           android:textColor="@color/black"
                            android:gravity="center"
                            android:textSize="20dp"
                            android:text="Total" />
@@ -305,6 +291,7 @@
                            android:id="@+id/totalPrice"
                            android:layout_width="wrap_content"
                            android:layout_height="wrap_content"
+                           android:textColor="@color/black"
                            android:textStyle="bold"
                            android:gravity="center"
                            android:layout_weight="1"

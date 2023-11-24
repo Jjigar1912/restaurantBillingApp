@@ -8,6 +8,7 @@
     android:id="@+id/drawer_layout"
     android:fitsSystemWindows="true"
     tools:openDrawer="start"
+    android:background="@color/white"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -58,6 +59,7 @@
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_menu"
         app:itemIconTint="@color/green"
+        android:background="@color/white"
         app:itemTextColor="@color/green"/>
 
 

@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.resturant_billing.model.order_item;
 import com.google.gson.Gson;
@@ -31,9 +32,15 @@ import com.google.gson.reflect.TypeToken;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import kotlin.jvm.internal.TypeReference;
@@ -42,9 +49,10 @@ public class ItemsOnTable extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    PdfDocument document;
     private String mParam1;
     private String mParam2;
+
+    private static int counter = 0;
 
     private List<order_item> foodList= new ArrayList<order_item>();
 
@@ -77,6 +85,17 @@ public class ItemsOnTable extends Fragment {
         View view=inflater.inflate(R.layout.fragment_items_on_table, container, false);
 
         TableLayout tableLayout = view.findViewById(R.id.foodListTable);
+
+
+        //generate unique id using date and unique randome id --------------------
+//        -----------------------------------------------------------------------
+
+        String uniqueId=generateUniqueId();
+
+        //        -----------------------------------------------------------------------
+        //        -----------------------------------------------------------------------
+
+
 
 
         if(getArguments() == null){
@@ -118,6 +137,7 @@ public class ItemsOnTable extends Fragment {
                    TableRow.LayoutParams.WRAP_CONTENT));
            index.setText(Integer.toString(i));
            index.setGravity(Gravity.CENTER);
+           index.setTextColor(getResources().getColor(R.color.black));
            index.setLayoutParams(new TableRow.LayoutParams(
                    0,
                    TableRow.LayoutParams.WRAP_CONTENT,
@@ -131,6 +151,7 @@ public class ItemsOnTable extends Fragment {
                    TableRow.LayoutParams.WRAP_CONTENT));
            itemname.setText(item.getName());
            itemname.setGravity(Gravity.CENTER);
+           itemname.setTextColor(getResources().getColor(R.color.black));
            itemname.setLayoutParams(new TableRow.LayoutParams(
                    0,
                    TableRow.LayoutParams.WRAP_CONTENT,
@@ -144,6 +165,7 @@ public class ItemsOnTable extends Fragment {
                    TableRow.LayoutParams.WRAP_CONTENT));
            itemQty.setText(Integer.toString(item.getQty()));
            itemQty.setGravity(Gravity.CENTER);
+           itemQty.setTextColor(getResources().getColor(R.color.black));
            itemQty.setLayoutParams(new TableRow.LayoutParams(
                    0,
                    TableRow.LayoutParams.WRAP_CONTENT,
@@ -156,6 +178,7 @@ public class ItemsOnTable extends Fragment {
            itemTotal.setLayoutParams(new TableRow.LayoutParams(
                    TableRow.LayoutParams.WRAP_CONTENT,
                    TableRow.LayoutParams.WRAP_CONTENT));
+           itemTotal.setTextColor(getResources().getColor(R.color.black));
            itemTotal.setText(Integer.toString(item.getQty() * item.getPrice()));
            itemTotal.setGravity(Gravity.CENTER);
            itemTotal.setLayoutParams(new TableRow.LayoutParams(
@@ -185,9 +208,11 @@ public class ItemsOnTable extends Fragment {
                    TableRow.LayoutParams.WRAP_CONTENT,
                    TableRow.LayoutParams.WRAP_CONTENT, 0.5f));
            index1.setText(Integer.toString(i));
+           index1.setTextColor(getResources().getColor(R.color.black));
 
            // Create the second TextView
            TextView itemName = new TextView(getContext());
+           itemName.setTextColor(getResources().getColor(R.color.black));
            itemName.setLayoutParams(new TableRow.LayoutParams(
                    200, // Set the width in pixels or use appropriate measure
                    TableRow.LayoutParams.WRAP_CONTENT, 2f));
@@ -199,6 +224,7 @@ public class ItemsOnTable extends Fragment {
                    TableRow.LayoutParams.WRAP_CONTENT,
                    TableRow.LayoutParams.WRAP_CONTENT, 0.5f));
            qty.setText(Integer.toString(item.getQty()));
+           qty.setTextColor(getResources().getColor(R.color.black));
 
            //create the fourth TextView
            TextView price = new TextView(getContext());
@@ -206,6 +232,7 @@ public class ItemsOnTable extends Fragment {
                    TableRow.LayoutParams.WRAP_CONTENT,
                    TableRow.LayoutParams.WRAP_CONTENT, 0.5f));
            price.setText(Integer.toString(item.getPrice()));
+           price.setTextColor(getResources().getColor(R.color.black));
 
            // Create the fifth TextView
            TextView totalOfitem = new TextView(getContext());
@@ -213,6 +240,7 @@ public class ItemsOnTable extends Fragment {
                    TableRow.LayoutParams.WRAP_CONTENT,
                    TableRow.LayoutParams.WRAP_CONTENT, 1f));
            totalOfitem.setText(Integer.toString(item.getQty() * item.getPrice()));
+           totalOfitem.setTextColor(getResources().getColor(R.color.black));
 
            // Add TextViews to the TableRow
            tableRow.addView(index1);
@@ -244,7 +272,7 @@ public class ItemsOnTable extends Fragment {
         printBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                generatePDFfromView(billstructure);
+                generatePDFfromView(billstructure,uniqueId);
             }
         });
 
@@ -252,31 +280,40 @@ public class ItemsOnTable extends Fragment {
         return view;
     }
 
+    public void generatePDFfromView(View view,String filename) {
+        Bitmap bitmap = getBitmapFromView(view);
 
-    public void generatePDFfromView(View view){
-        Bitmap bitmap=getBitmapFromView(view);
-        document=new PdfDocument();
+        // Create a PDF document
+        PdfDocument document = new PdfDocument();
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(bitmap.getWidth(), bitmap.getHeight(), 1).create();
+        PdfDocument.Page page = document.startPage(pageInfo);
+        Canvas canvas = page.getCanvas();
+        canvas.drawBitmap(bitmap, 0, 0, null);
+        document.finishPage(page);
 
-        PdfDocument.PageInfo myPageInfo=new PdfDocument.PageInfo.Builder(bitmap.getWidth(),bitmap.getHeight(),1).create();
-        PdfDocument.Page myPage= document.startPage(myPageInfo);
-        Canvas canvas=myPage.getCanvas();
-        canvas.drawBitmap(bitmap,0,0,null);
-        document.finishPage(myPage);
-        createFile();
+        // Create a file for the PDF
+        File pdfFile = createFile(filename);
 
+        try {
+            // Write the PDF content to the file
+            document.writeTo(new FileOutputStream(pdfFile));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Close the document
+        document.close();
     }
 
-    public Bitmap getBitmapFromView(View view){
-        Bitmap returnedBitmap=Bitmap.createBitmap(view.getWidth(),view.getHeight(), Bitmap.Config.ARGB_8888);
+    public Bitmap getBitmapFromView(View view) {
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
 
-        Canvas canvas=new Canvas(returnedBitmap);
-
-        Drawable bgDrawable=view.getBackground();
-
-        if(bgDrawable != null){
+        Drawable bgDrawable = view.getBackground();
+        if (bgDrawable != null) {
             bgDrawable.draw(canvas);
-        }else{
-            canvas.drawColor(getResources().getColor(R.color.white));
+        } else {
+            canvas.drawColor(getResources().getColor(android.R.color.white));
         }
 
         view.draw(canvas);
@@ -284,15 +321,27 @@ public class ItemsOnTable extends Fragment {
         return returnedBitmap;
     }
 
-    public void createFile(){
-        Intent intent=new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/pdf");
-        intent.putExtra(Intent.EXTRA_TITLE,"invoice.pdf");
-        startActivityForResult(intent, 1);
+    public File createFile(String filename) {
+        // Create a directory for the PDF file
+        String filepath="storage/emulated/0/Download/";
+        File directory = new File(filepath);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        // Create the PDF file
+        File pdfFile = new File(directory, filename+".pdf");
+
+        // Open the file in write mode, creating it if necessary
+        try {
+            pdfFile.createNewFile();
+            Toast.makeText(getContext(), "File is Saved !!", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return pdfFile;
     }
-
-
 
     private int dpToPx(int dp) {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
@@ -301,6 +350,22 @@ public class ItemsOnTable extends Fragment {
     }
 
 
+    public static String generateUniqueId() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String formatedDate = now.format(formatter);
+
+        UUID uuid = UUID.randomUUID();
+
+        // Convert the UUID to a string
+        String uniqueId = uuid.toString();
+
+        // Remove hyphens to get a compact string
+        uniqueId = uniqueId.replaceAll("-", "");
+        uniqueId = formatedDate+uniqueId;
+        
+        return uniqueId;
+    }
 
 
 
