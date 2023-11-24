@@ -34,9 +34,7 @@ public class MainLayout extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainlayout);
 
-//        FloatingActionButton fab=(FloatingActionButton) findViewById(R.id.fab);
         drawerLayout = findViewById(R.id.drawer_layout);
-//        BottomNavigationView bottomNavigationView=(BottomNavigationView) findViewById(R.id.bottomNavigationView);
         Toolbar toolbar=(Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -49,13 +47,10 @@ public class MainLayout extends AppCompatActivity{
             navigationView.setCheckedItem(R.id.nav_home);
         }
 
-
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Toast.makeText(MainLayout.this, String.valueOf(item.getItemId()), Toast.LENGTH_SHORT).show();
                 switch (String.valueOf(item.getItemId())){
-
                     case "2131296593":
                         replaceFragment( new ItemAddFragment());
                         break;
@@ -67,7 +62,7 @@ public class MainLayout extends AppCompatActivity{
                         break;
 
                     default:
-//                        Toast.makeText(MainLayout.this, "Please select valid menu Item", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainLayout.this, "Please select valid menu Item", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 return true;
@@ -84,7 +79,7 @@ public class MainLayout extends AppCompatActivity{
             }
         });
 
-        replaceFragment(new ItemsOnTable());
+        replaceFragment(new ItemAddFragment());
 
 
 
@@ -100,63 +95,6 @@ public class MainLayout extends AppCompatActivity{
         fragmentTransaction.commit();
     }
 
-
-
-//
-//    private void showBottomDialog() {
-//
-//        final Dialog dialog = new Dialog(this);
-//        dialog.requestWindowFeature(getWindow().FEATURE_NO_TITLE);
-//        dialog.setContentView(R.layout.bottomsheetlayout);
-//
-//        LinearLayout videoLayout = dialog.findViewById(R.id.layoutVideo);
-//        LinearLayout shortsLayout = dialog.findViewById(R.id.layoutShorts);
-//        LinearLayout liveLayout = dialog.findViewById(R.id.layoutLive);
-//        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
-//
-//        videoLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                dialog.dismiss();
-//                Toast.makeText(MainLayout.this,"Upload a Video is clicked",Toast.LENGTH_SHORT).show();
-//
-//            }
-//        });
-//        shortsLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                dialog.dismiss();
-//                Toast.makeText(MainLayout.this,"Create a short is Clicked",Toast.LENGTH_SHORT).show();
-//
-//            }
-//        });
-//
-//        liveLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                dialog.dismiss();
-//                Toast.makeText(MainLayout.this,"Go live is Clicked",Toast.LENGTH_SHORT).show();
-//
-//            }
-//        });
-//
-//        cancelButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        dialog.show();
-//        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-//        dialog.getWindow().setGravity(Gravity.BOTTOM);
-//
-//    }
 
 
 }
