@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import com.example.resturant_billing.model.*;
 
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,6 +29,8 @@ public class ItemAddFragment extends Fragment{ //  implements View.OnClickListen
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
+    public static ArrayList<ArrayList> order = new ArrayList<>();
+
     private static final String ARG_PARAM2 = "param2";
 
     //    List food item
@@ -69,25 +72,29 @@ public class ItemAddFragment extends Fragment{ //  implements View.OnClickListen
         View view = inflater.inflate(R.layout.fragment_item_add, container, false);
 
 
-
-        foodList.add(new order_item(11,"Pizza Margherita",180,"pizza",0,180));
-        foodList.add(new order_item(12,"Pizza Vegetarian",175,"pizza",0,175*2));
-        foodList.add(new order_item(13,"Veggie Burger",120,"burger",0,120));
-        foodList.add(new order_item(14,"Cheeseburger",140,"burger",0,420));
-        foodList.add(new order_item(15,"Greek Salad",220,"salad",0,440));
-        foodList.add(new order_item(16,"Grilled Cheese",60,"sandwich",0,240));
-        foodList.add(new order_item(17,"Grilled Salmon",180,"seafood",0,180));
-        foodList.add(new order_item(18,"Spicy Chicken Curry",180,"special",0,180));
-        foodList.add(new order_item(19,"Paneer Tikka Masala",220,"special",0,220));
-        foodList.add(new order_item(20,"Cola",30,"Beverages",0,60));
-        foodList.add(new order_item(21,"Mango Lassi",60,"Beverages",0,60));
-        foodList.add(new order_item(22,"Mozzarella Sticks",60,"Appetizers",0,199));
-        foodList.add(new order_item(23,"Nachos",60,"Appetizers",0,179));
-        foodList.add(new order_item(24,"Bruschetta",60,"Appetizers",0,169));
-        foodList.add(new order_item(25,"Chocolate Cake",60,"Desserts",0,80));
-        foodList.add(new order_item(26,"Vanilla Ice Cream",60,"Desserts",0,50));
-
-
+        DBHelper db = new DBHelper(getContext());
+        ArrayList<ArrayList> data = db.getFood();
+        for(int i = 0 ; i < data.size() ; i++)
+        {
+            foodList.add(new order_item(Integer.parseInt((String) data.get(i).get(0)),data.get(i).get(1).toString(),Integer.parseInt(data.get(i).get(2).toString()),data.get(i).get(3).toString(),0,0));
+        }
+//        foodList.add(new order_item(11,"Pizza Margherita",180,"pizza",0,180));
+//        foodList.add(new order_item(12,"Pizza Vegetarian",175,"pizza",0,175*2));
+//        foodList.add(new order_item(13,"Veggie Burger",120,"burger",0,120));
+//        foodList.add(new order_item(14,"Cheeseburger",140,"burger",0,420));
+//        foodList.add(new order_item(15,"Greek Salad",220,"salad",0,440));
+//        foodList.add(new order_item(16,"Grilled Cheese",60,"sandwich",0,240));
+//        foodList.add(new order_item(17,"Grilled Salmon",180,"seafood",0,180));
+//        foodList.add(new order_item(18,"Spicy Chicken Curry",180,"special",0,180));
+//        foodList.add(new order_item(19,"Paneer Tikka Masala",220,"special",0,220));
+//        foodList.add(new order_item(20,"Cola",30,"Beverages",0,60));
+//        foodList.add(new order_item(21,"Mango Lassi",60,"Beverages",0,60));
+//        foodList.add(new order_item(22,"Mozzarella Sticks",60,"Appetizers",0,199));
+//        foodList.add(new order_item(23,"Nachos",60,"Appetizers",0,179));
+//        foodList.add(new order_item(24,"Bruschetta",60,"Appetizers",0,169));
+//        foodList.add(new order_item(25,"Chocolate Cake",60,"Desserts",0,80));
+//        foodList.add(new order_item(26,"Vanilla Ice Cream",60,"Desserts",0,50));
+//
         GridLayout foodItemContainer=(GridLayout) view.findViewById(R.id.foodItemGrid);
 
         for (order_item item : foodList){
@@ -178,6 +185,16 @@ public class ItemAddFragment extends Fragment{ //  implements View.OnClickListen
                     if(item.getQty() > 0){
                         item.setQty(item.getQty()-1);
                         editText.setText(Integer.toString(item.getQty()));
+                        ArrayList<String> arr = new ArrayList<>();
+
+                            int pos  = getPosition(order,item.getName());
+                            Log.d("W",String.valueOf(pos));
+                            order.remove(pos);
+                            arr.add(item.getName());
+                            arr.add(String.valueOf(item.getPrice()));
+                            arr.add(String.valueOf(item.getQty()));
+                            order.add(arr);
+
                     }
                 }
             });
@@ -212,6 +229,25 @@ public class ItemAddFragment extends Fragment{ //  implements View.OnClickListen
                 public void onClick(View view) {
                     item.setQty(item.getQty()+1);
                     editText.setText(Integer.toString(item.getQty()));
+                    ArrayList<String> arr = new ArrayList<>();
+                    boolean res = checkInOrder(order,item.getName());
+                    Log.d("W",String.valueOf(res));
+                    if(!res){
+                        arr.add(item.getName());
+                        arr.add(String.valueOf(item.getPrice()));
+                        arr.add(String.valueOf(item.getQty()));
+                        order.add(arr);
+                    }
+                    else
+                    {
+                        int pos  = getPosition(order,item.getName());
+                        Log.d("W",String.valueOf(pos));
+                        order.remove(pos);
+                        arr.add(item.getName());
+                        arr.add(String.valueOf(item.getPrice()));
+                        arr.add(String.valueOf(item.getQty()));
+                        order.add(arr);
+                    }
                 }
             });
 
@@ -225,7 +261,28 @@ public class ItemAddFragment extends Fragment{ //  implements View.OnClickListen
         return view;
     }
 
-
+    public boolean checkInOrder(ArrayList<ArrayList> a,String name)
+    {
+        for(int i = 0 ; i < a.size() ; i++)
+        {
+            if(a.get(i).get(0).toString()==name)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public int getPosition(ArrayList<ArrayList> a,String name)
+    {
+        for(int i = 0 ; i < a.size() ; i++)
+        {
+            if(a.get(i).get(0).toString()==name)
+            {
+                return i;
+            }
+        }
+        return 0;
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();

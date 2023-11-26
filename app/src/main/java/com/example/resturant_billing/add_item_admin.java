@@ -55,6 +55,7 @@ public class add_item_admin extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+
     }
 
     @Override
@@ -64,17 +65,17 @@ public class add_item_admin extends Fragment {
         View view=inflater.inflate(R.layout.fragment_add_item_admin, container, false);
 //
         inputLayoutName = (TextInputLayout) view.findViewById(R.id.input_layout_name);
-        inputLayoutQty = (TextInputLayout) view.findViewById(R.id.input_layout_qty);
+    //    inputLayoutQty = (TextInputLayout) view.findViewById(R.id.input_layout_qty);
         inputLayoutPrice = (TextInputLayout) view.findViewById(R.id.input_layout_price);
         inputLayoutCategory = (TextInputLayout) view.findViewById(R.id.input_layout_category);
         inputName = (EditText) view.findViewById(R.id.input_name);
-        inputQty = (EditText) view.findViewById(R.id.input_qty);
+        //inputQty = (EditText) view.findViewById(R.id.input_qty);
         inputPrice = (EditText) view.findViewById(R.id.input_price);
         inputCategory = (EditText) view.findViewById(R.id.input_category);
         btnAdd=(AppCompatButton) view.findViewById(R.id.btnAdd);
 
         inputName.addTextChangedListener(new MyTextWatcher(inputName));
-        inputQty.addTextChangedListener(new MyTextWatcher(inputQty));
+        //inputQty.addTextChangedListener(new MyTextWatcher(inputQty));
         inputPrice.addTextChangedListener(new MyTextWatcher(inputPrice));
         inputCategory.addTextChangedListener(new MyTextWatcher(inputCategory));
 
@@ -99,15 +100,19 @@ public class add_item_admin extends Fragment {
             return;
         }
 
-        if (!validateQty()) {
-            return;
-        }
+//        if (!validateQty()) {
+//            return;
+//        }
 
         if (!validatePrice()) {
             return;
         }
-
-        Toast.makeText(getContext(), "Thank You!", Toast.LENGTH_SHORT).show();
+        DBHelper dbHelper = new DBHelper(getContext());
+        boolean result = dbHelper.addItem(inputName.getText().toString(),inputPrice.getText().toString(),inputCategory.getText().toString());
+        Toast.makeText(getContext(),"Thank you ! ", Toast.LENGTH_SHORT).show();
+        inputPrice.setText("");
+        inputCategory.setText("");
+        inputName.setText("");
     }
 
     private boolean validateName() {
@@ -121,20 +126,20 @@ public class add_item_admin extends Fragment {
 
         return true;
     }
-
-    private boolean validateQty() {
-        String qty = inputQty.getText().toString().trim();
-
-        if (qty.isEmpty() ) {
-            inputLayoutQty.setError("Error !!!");
-            requestFocus(inputQty);
-            return false;
-        } else {
-            inputLayoutQty.setErrorEnabled(false);
-        }
-
-        return true;
-    }
+//
+//    private boolean validateQty() {
+//        String qty = inputQty.getText().toString().trim();
+//
+//        if (qty.isEmpty() ) {
+//            inputLayoutQty.setError("Error !!!");
+//            requestFocus(inputQty);
+//            return false;
+//        } else {
+//            inputLayoutQty.setErrorEnabled(false);
+//        }
+//
+//        return true;
+//    }
 
     private boolean validatePrice() {
         if (inputPrice.getText().toString().trim().isEmpty()) {

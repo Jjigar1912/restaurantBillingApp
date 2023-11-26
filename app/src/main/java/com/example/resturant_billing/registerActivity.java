@@ -31,7 +31,7 @@ public class registerActivity extends AppCompatActivity {
                 String userContact = contact.getText().toString();
                 String userPassword = password.getText().toString();
                 DBHelper dbHelper = new DBHelper(getApplicationContext());
-                if(useremail.isEmpty())
+                if(useremail.trim().isEmpty())
                 {
                     Toast.makeText(getApplicationContext(),"Enter Valid Email",Toast.LENGTH_LONG).show();
                 }
@@ -39,13 +39,13 @@ public class registerActivity extends AppCompatActivity {
                 {
                     Toast.makeText(getApplicationContext(),"Enter Valid Email",Toast.LENGTH_LONG).show();
                 }
-                else if(userContact.isEmpty()){
+                else if(userContact.trim().isEmpty()){
                     Toast.makeText(getApplicationContext(),"Enter Valid Contact",Toast.LENGTH_LONG).show();
                 }
-                else if(userContact.length()!=10){
+                else if(userContact.trim().length()!=10){
                     Toast.makeText(getApplicationContext(),"Enter 10 Digit Contact Number",Toast.LENGTH_LONG).show();
                 }
-                else if(userPassword.isEmpty())
+                else if(userPassword.trim().isEmpty())
                 {
                     Toast.makeText(getApplicationContext(),"Password is Required.",Toast.LENGTH_LONG).show();
                 }

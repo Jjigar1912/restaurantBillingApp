@@ -9,11 +9,16 @@ import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.MainThread;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 
+import android.os.Environment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -95,21 +100,34 @@ public class ItemsOnTable extends Fragment {
         //        -----------------------------------------------------------------------
         //        -----------------------------------------------------------------------
 
-
-
+        TableLayout bill=(TableLayout) view.findViewById(R.id.billTable);
+        view.findViewById(R.id.removeBill).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ItemAddFragment.order.clear();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frame_layout,new ItemsOnTable());
+                fragmentTransaction.commit();
+            }
+        });
 
         if(getArguments() == null){
-            foodList.add(new order_item(11,"Pizza Margherita",180,"pizza",1,180));
-            foodList.add(new order_item(12,"Pizza Vegetarian",175,"pizza",2,175*2));
-            foodList.add(new order_item(13,"Veggie Burger",120,"burger",1,120));
-            foodList.add(new order_item(14,"Cheeseburger",140,"burger",3,420));
-            foodList.add(new order_item(15,"Greek Salad",220,"salad",2,440));
-            foodList.add(new order_item(16,"Grilled Cheese",60,"sandwich",4,240));
-            foodList.add(new order_item(17,"Grilled Salmon",180,"seafood",1,180));
-            foodList.add(new order_item(18,"Spicy Chicken Curry",180,"special",1,180));
-            foodList.add(new order_item(19,"Paneer Tikka Masala",220,"special",1,220));
-            foodList.add(new order_item(20,"Cola",30,"Beverages",2,60));
-            foodList.add(new order_item(21,"Mango Lassi",60,"Beverages",1,60));
+//            foodList.add(new order_item(11,"Pizza Margherita",180,"pizza",1,180));
+//            foodList.add(new order_item(12,"Pizza Vegetarian",175,"pizza",2,175*2));
+//            foodList.add(new order_item(13,"Veggie Burger",120,"burger",1,120));
+//            foodList.add(new order_item(14,"Cheeseburger",140,"burger",3,420));
+//            foodList.add(new order_item(15,"Greek Salad",220,"salad",2,440));
+//            foodList.add(new order_item(16,"Grilled Cheese",60,"sandwich",4,240));
+//            foodList.add(new order_item(17,"Grilled Salmon",180,"seafood",1,180));
+//            foodList.add(new order_item(18,"Spicy Chicken Curry",180,"special",1,180));
+//            foodList.add(new order_item(19,"Paneer Tikka Masala",220,"special",1,220));
+//            foodList.add(new order_item(20,"Cola",30,"Beverages",2,60));
+//            foodList.add(new order_item(21,"Mango Lassi",60,"Beverages",1,60));
+            for(int i = 0 ; i < ItemAddFragment.order.size() ; i++)
+            {
+                foodList.add(new order_item(i+1 , ItemAddFragment.order.get(i).get(0).toString(),Integer.parseInt(ItemAddFragment.order.get(i).get(1).toString()),"",Integer.parseInt(ItemAddFragment.order.get(i).get(2).toString()),Integer.parseInt(ItemAddFragment.order.get(i).get(2).toString()) * Integer.parseInt(ItemAddFragment.order.get(i).get(1).toString())));
+            }
         }else{
             Gson gson = new Gson();
             Type listType = new TypeToken<List<order_item>>() {}.getType();
@@ -123,7 +141,6 @@ public class ItemsOnTable extends Fragment {
         // Create a new table row
         int i=1;
         int sum=0;
-        TableLayout bill=(TableLayout) view.findViewById(R.id.billTable);
        for(order_item item : foodList){
            sum+=item.getQty()*item.getPrice();
            TableRow row = new TableRow(getContext());
@@ -273,6 +290,11 @@ public class ItemsOnTable extends Fragment {
             @Override
             public void onClick(View view) {
                 generatePDFfromView(billstructure,uniqueId);
+                ItemAddFragment.order.clear();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frame_layout,new ItemsOnTable());
+                fragmentTransaction.commit();
             }
         });
 
@@ -300,38 +322,31 @@ public class ItemsOnTable extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         // Close the document
         document.close();
     }
-
     public Bitmap getBitmapFromView(View view) {
         Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(returnedBitmap);
-
         Drawable bgDrawable = view.getBackground();
         if (bgDrawable != null) {
             bgDrawable.draw(canvas);
         } else {
             canvas.drawColor(getResources().getColor(android.R.color.white));
         }
-
         view.draw(canvas);
-
         return returnedBitmap;
     }
-
     public File createFile(String filename) {
         // Create a directory for the PDF file
-        String filepath="storage/emulated/0/Download/";
+        String filepath=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+        Log.d("file",filepath);
         File directory = new File(filepath);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-
+//        if (!directory.exists()) {
+//            directory.mkdirs();
+//        }
         // Create the PDF file
         File pdfFile = new File(directory, filename+".pdf");
-
         // Open the file in write mode, creating it if necessary
         try {
             pdfFile.createNewFile();
@@ -339,34 +354,23 @@ public class ItemsOnTable extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return pdfFile;
     }
-
     private int dpToPx(int dp) {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         float widthInPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, displayMetrics);
         return (int) widthInPx;
     }
-
-
     public static String generateUniqueId() {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         String formatedDate = now.format(formatter);
-
         UUID uuid = UUID.randomUUID();
-
         // Convert the UUID to a string
         String uniqueId = uuid.toString();
-
         // Remove hyphens to get a compact string
         uniqueId = uniqueId.replaceAll("-", "");
         uniqueId = formatedDate+uniqueId;
-        
         return uniqueId;
     }
-
-
-
 }

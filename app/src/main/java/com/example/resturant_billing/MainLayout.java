@@ -1,9 +1,12 @@
 package com.example.resturant_billing;
 
 import android.app.Dialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +39,7 @@ public class MainLayout extends AppCompatActivity{
 
 //        FloatingActionButton fab=(FloatingActionButton) findViewById(R.id.fab);
         drawerLayout = findViewById(R.id.drawer_layout);
+
 //        BottomNavigationView bottomNavigationView=(BottomNavigationView) findViewById(R.id.bottomNavigationView);
         Toolbar toolbar=(Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,19 +57,27 @@ public class MainLayout extends AppCompatActivity{
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Toast.makeText(MainLayout.this, String.valueOf(item.getItemId()), Toast.LENGTH_SHORT).show();
-                switch (String.valueOf(item.getItemId())){
+                Log.d("J",String.valueOf(item.getItemId()));
+                switch (item.getTitle().toString()){
 
-                    case "2131296593":
+                    case "Home":
                         replaceFragment( new ItemAddFragment());
                         break;
-                    case "2131296334":
+                    case "Add Item":
                         replaceFragment(new add_item_admin());
                         break;
-                    case "2131296592":
+                    case "Profile":
                         replaceFragment(new ProfileFragment());
                         break;
-
+                    case "Logout":
+                        SharedPreferences preferences = getSharedPreferences("id",MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putInt("userid",0);
+                        editor.apply();
+                        Intent intent = new Intent(getApplicationContext(),loginActivity.class);
+                        startActivity(intent);
+                        finish();
+                        break;
                     default:
 //                        Toast.makeText(MainLayout.this, "Please select valid menu Item", Toast.LENGTH_SHORT).show();
                         break;
@@ -81,22 +93,18 @@ public class MainLayout extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 replaceFragment(new ItemsOnTable());
+
             }
         });
-
-        replaceFragment(new ItemsOnTable());
-
-
-
-
-
+        replaceFragment(new ItemAddFragment());
     }
 
 
     private  void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
+
+        fragmentTransaction.replace(R.id.frame_layout,fragment);
         fragmentTransaction.commit();
     }
 

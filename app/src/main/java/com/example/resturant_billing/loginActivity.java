@@ -1,7 +1,9 @@
 package com.example.resturant_billing;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,6 +27,7 @@ public class loginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 useremail = findViewById(R.id.emailInput);
                 userPassword = findViewById(R.id.passwordInput);
                 String email = useremail.getText().toString();
@@ -38,6 +41,13 @@ public class loginActivity extends AppCompatActivity {
                     boolean result = dbHelper.checkLogin(email, password);
                     if (result) {
                         Intent intent = new Intent(getApplicationContext(), MainLayout.class);
+
+                        SharedPreferences preferences = getSharedPreferences("id",MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        int id = dbHelper.getUserId(email,password);
+                        Log.d("w",String.valueOf(id));
+                        editor.putInt("userid",id);
+                        editor.apply();
                         startActivity(intent);
                         finish();
                     }
@@ -54,9 +64,7 @@ public class loginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent=new Intent(loginActivity.this, registerActivity.class);
                 startActivity(intent);
-
             }
-
         });
 
 

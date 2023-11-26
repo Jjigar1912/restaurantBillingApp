@@ -4,10 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ItemAddFragment">
-
-
-
-
+    
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,14 +65,7 @@
                           android:alignmentMode="alignMargins"
                           android:columnCount="2"
                           android:orientation="horizontal">
-
-
-
                       </GridLayout>
-
                   </ScrollView>
-
-
         </LinearLayout>
-
 </FrameLayout>

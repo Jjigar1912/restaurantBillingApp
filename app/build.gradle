@@ -1,21 +1,17 @@
 plugins {
     id 'com.android.application'
 }
-
 android {
     namespace 'com.example.resturant_billing'
     compileSdk 33
-
     defaultConfig {
         applicationId "com.example.resturant_billing"
-        minSdk 33
+        minSdk 29
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -27,9 +23,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-
 dependencies {
-
     implementation 'com.itextpdf:itextg:5.5.10'
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
